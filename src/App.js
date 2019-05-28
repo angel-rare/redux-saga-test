@@ -1,27 +1,34 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import routes from './common/constant';
-import store from './store';
-import './App.css';
+import React from 'react'
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
 
-function App() {
-  return (
-    <Provider store={store}>
-      <Router>
-        <Link to="/characters">Characters' List</Link> <br />
-        <Link to="/character/{:id}">Detail</Link>
-        {routes.map((route, idx) => (
-          <Route
-          key={idx}
-          exact={route.exact}
-          path={route.path}
-          component={route.component}
-          />
-          ))}
-      </Router>
-    </Provider>
-  );
+import { Header } from './containers'
+import { paths } from './constants/paths'
+
+import './_global.scss'
+
+const CoreViewerBase = () => (
+  <Switch>
+    {
+      paths.map((path, idx) => (
+        <Route exact
+          path={path.path}
+          component={path.component}
+          key={idx} />
+      ))
+    }
+    <Redirect to="/" />
+  </Switch>
+)
+
+class App extends React.Component {
+  render () {
+    return (
+      <React.Fragment>
+        <Header />
+        <CoreViewerBase />
+      </React.Fragment>
+    )
+  }
 }
 
-export default App;
+export default withRouter(App)
